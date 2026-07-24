@@ -4,7 +4,7 @@ from config import settings
 from database import create_tables
 
 # Import routers
-from routes import services, bookings, users, gallery, availability
+from routes import services, bookings, users, gallery, availability, jokes
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -34,6 +34,7 @@ app.include_router(services.router, prefix="/api/services", tags=["Services"])
 app.include_router(bookings.router, prefix="/api/bookings", tags=["Bookings"])
 app.include_router(gallery.router, prefix="/api/gallery", tags=["Gallery"])
 app.include_router(availability.router, prefix="/api/availability", tags=["Availability"])
+app.include_router(jokes.router, prefix="/api/jokes", tags=["Jokes"])
 
 # Health check
 @app.get("/")
