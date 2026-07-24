@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: glossxgiggles_db
+    environment:
+      POSTGRES_DB: glossxgiggles
+      POSTGRES_USER: nail_admin
+      POSTGRES_PASSWORD: secure_password_123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - glossxgiggles_network
+
+  api:
+    build: .
+    container_name: glossxgiggles_api
+    environment:
+      DATABASE_URL: postgresql://nail_admin:secure_password_123@db:5432/glossxgiggles
+      SECRET_KEY: your-super-secret-key-change-in-production
+      ENVIRONMENT: production
+      HOST: 0.0.0.0
+      PORT: 8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    networks:
+      - glossxgiggles_network
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  postgres_data:
+
+networks:
+  glossxgiggles_network:
+    driver: bridge
